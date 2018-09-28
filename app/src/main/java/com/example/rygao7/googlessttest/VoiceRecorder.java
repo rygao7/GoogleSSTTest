@@ -19,7 +19,6 @@ package com.example.rygao7.googlessttest;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.support.annotation.NonNull;
 
 
 /**
@@ -81,7 +80,7 @@ public class VoiceRecorder {
     /** The timestamp when the current voice is started. */
     private long mVoiceStartedMillis;
 
-    public VoiceRecorder(@NonNull Callback callback) {
+    public VoiceRecorder(Callback callback) {
         mCallback = callback;
     }
 
