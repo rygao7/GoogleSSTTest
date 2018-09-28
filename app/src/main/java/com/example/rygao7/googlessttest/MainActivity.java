@@ -2,8 +2,18 @@ package com.example.rygao7.googlessttest;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.Manifest;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+
+import android.widget.TextView;
 
 import android.util.Log;
+import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
 
 
 import com.google.cloud.speech.v1p1beta1.RecognitionAudio;
@@ -15,11 +25,15 @@ import com.google.cloud.speech.v1p1beta1.SpeechRecognitionAlternative;
 import com.google.cloud.speech.v1p1beta1.SpeechRecognitionResult;
 import com.google.protobuf.ByteString;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 
 import java.util.List;
 
 public class MainActivity extends Activity {
+
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1;
 
     private VoiceRecorder mVoiceRecorder;
 
@@ -56,6 +70,10 @@ public class MainActivity extends Activity {
                     SpeechRecognitionAlternative alternative = result.getAlternativesList().get(0);
                     recognizeResult = alternative.getTranscript();
 
+                    Toast.makeText(MainActivity.this, "This is my Toast message!",
+                            Toast.LENGTH_LONG).show();
+
+
 
                 }
             }
@@ -74,15 +92,20 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        startVoiceRecorder();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED) {
+            startVoiceRecorder();
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.RECORD_AUDIO)) {
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    REQUEST_RECORD_AUDIO_PERMISSION);
+        }
     }
 
     @Override
